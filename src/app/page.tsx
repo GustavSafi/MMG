@@ -5,7 +5,7 @@ import { motion, useScroll, useSpring, useInView } from "framer-motion";
 import TriageEngine from "@/components/TriageEngine";
 
 /* ------------------------------------------------------------------ */
-/*  DATA — grounded strictly in Yosef's CV                            */
+/*  DATA: grounded strictly in Gustav's CV                            */
 /* ------------------------------------------------------------------ */
 
 const NAV = [
@@ -18,7 +18,7 @@ const NAV = [
 ];
 
 const STATS = [
-  { n: "1st", label: "Place — Hospition.IT hackathon" },
+  { n: "1st", label: "Place, Hospition.IT hackathon" },
   { n: "05", label: "Engineers led at Podmanager" },
   { n: "03", label: "Languages spoken fluently" },
   { n: "'24", label: "Freelancing since" },
@@ -26,7 +26,7 @@ const STATS = [
 
 const WORK = [
   {
-    period: "Sep 2025 — Nov 2025",
+    period: "Sep 2025 – Nov 2025",
     role: "Cloud Team Lead",
     org: "Podmanager",
     type: "Internship",
@@ -34,7 +34,7 @@ const WORK = [
     tags: ["Azure", "DevOps", "Leadership"],
   },
   {
-    period: "Feb 2025 — Present",
+    period: "Feb 2025 – Present",
     role: "AI Data Annotation",
     org: "Koikco",
     type: "Remote contract",
@@ -42,15 +42,15 @@ const WORK = [
     tags: ["AI", "Data", "Swedish NLP"],
   },
   {
-    period: "Aug 2024 — Present",
+    period: "Aug 2024 – Present",
     role: "Freelance Developer",
     org: "Upwork & direct clients",
     type: "Self-employed",
-    desc: "Build websites and code solutions for companies through Upwork and my own client relationships — from scoping to delivery.",
+    desc: "Build websites and code solutions for companies through Upwork and my own client relationships, from scoping to delivery.",
     tags: ["Web", "Client work", "Full-stack"],
   },
   {
-    period: "Jan 2024 — Jan 2025",
+    period: "Jan 2024 – Jan 2025",
     role: "Staffing Consultant",
     org: "Jovi",
     type: "On-site",
@@ -58,7 +58,7 @@ const WORK = [
     tags: ["Troubleshooting", "Production"],
   },
   {
-    period: "Jun 2021 — Sep 2023",
+    period: "Jun 2021 – Sep 2023",
     role: "Vehicle Assembler",
     org: "Volvo Cars",
     type: "On-site",
@@ -74,11 +74,23 @@ const STACK = [
   },
   {
     group: "Front-end",
-    items: ["Blazor", "JavaScript", "HTML & CSS"],
+    items: ["Blazor", "React", "JavaScript", "HTML & CSS"],
   },
   {
     group: "AI & Data",
-    items: ["AI Agents", "LLM Integration", "Prompt Engineering", "Python", "Data Annotation"],
+    items: [
+      "LLMs",
+      "AI Agents",
+      "LLM Integration",
+      "RAG",
+      "Vector Search & Embeddings",
+      "Azure OpenAI",
+      "Semantic Kernel",
+      "Tool Calling",
+      "Prompt Engineering",
+      "Python",
+      "Data Annotation",
+    ],
   },
   {
     group: "Practices & Tools",
@@ -87,9 +99,9 @@ const STACK = [
 ];
 
 const EDUCATION = [
-  { school: "IT-Högskolan", detail: ".NET Cloud Developer — Göteborg", year: "2024–26" },
+  { school: "IT-Högskolan", detail: ".NET Cloud Developer, Göteborg", year: "2024–26" },
   { school: "Harvard University", detail: "CS50: Introduction to Computer Science (edX)", year: "Cert." },
-  { school: "Polhemsgymnasiet", detail: "Upper secondary — Göteborg", year: "—" },
+  { school: "Polhemsgymnasiet", detail: "Upper secondary, Göteborg", year: "" },
 ];
 
 const EXTRAS = [
@@ -99,7 +111,7 @@ const EXTRAS = [
   { k: "Certificates", v: "IT-Högskolan diploma · CS50 certificate" },
 ];
 
-const MARQUEE = [".NET", "AZURE", "C#", "BLAZOR", "SQL SERVER", "EF CORE", "MONGODB", "NODE.JS", "AI AGENTS", "PYTHON", "CI/CD", "DEVOPS", "REACT"];
+const MARQUEE = [".NET", "AZURE", "C#", "BLAZOR", "SQL SERVER", "EF CORE", "MONGODB", "NODE.JS", "LLMS", "AI AGENTS", "RAG", "PYTHON", "CI/CD", "DEVOPS", "REACT"];
 
 /* ------------------------------------------------------------------ */
 /*  PRIMITIVES                                                        */
@@ -162,7 +174,7 @@ function Header() {
     <header className="fixed top-0 inset-x-0 z-50 bg-paper/85 backdrop-blur-sm border-b border-ink">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 h-14 flex items-center justify-between">
         <a href="#top" className="font-display font-semibold text-lg tracking-tight">
-          YOSEF SAFI<span className="text-accent">.</span>
+          GUSTAV SAFI<span className="text-accent">.</span>
         </a>
         <nav className="hidden md:flex items-center gap-6">
           {NAV.map((n) => (
@@ -199,7 +211,7 @@ function Hero() {
         >
           <span>Portfolio / 2026</span>
           <span>.NET Cloud Developer</span>
-          <span className="hidden sm:block">Göteborg — Sweden</span>
+          <span className="hidden sm:block">Göteborg, Sweden</span>
         </motion.div>
 
         {/* giant name */}
@@ -211,7 +223,7 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              YOSEF
+              GUSTAV
             </motion.span>
             <motion.span
               className="block"
@@ -235,7 +247,7 @@ function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.5 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               >
-                {i === 0 ? "I build stable systems — " : ""}
+                {i === 0 ? "I build stable systems, " : ""}
                 {w}
               </motion.span>
             ))}
@@ -247,8 +259,8 @@ function Hero() {
             className="flex flex-col justify-between gap-6"
           >
             <p className="font-sans text-ink/70 leading-relaxed max-w-sm">
-              A .NET &amp; cloud developer who ships working software — hands-on with C#, databases, APIs and Azure across
-              both front-end and back-end, and building practical AI on top.
+              A .NET &amp; cloud developer who ships working software. I work hands-on with C#, databases, APIs and Azure
+              across both front-end and back-end, and build practical AI on top.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#contact" className="group inline-flex items-center gap-2 bg-ink text-paper px-5 py-2.5 kicker hover:bg-accent transition-colors">
@@ -320,8 +332,8 @@ function Profile() {
             something stable that actually ships.
           </p>
           <p className="font-sans text-ink/70 leading-relaxed max-w-xl">
-            My focus is .NET and the cloud — C#, databases, APIs and Azure — with real competence on both the front-end
-            and the back-end. I learn fast, take ownership of what I&apos;m given, and I&apos;m just as comfortable building
+            My focus is .NET and the cloud, including C#, databases, APIs and Azure. I have real competence on both the
+            front-end and the back-end. I learn fast, take ownership of what I&apos;m given, and I&apos;m just as comfortable building
             my own projects (including practical AI tools) as I am collaborating in a team or freelancing for clients.
           </p>
         </Reveal>
@@ -349,7 +361,7 @@ function Triage() {
   return (
     <section id="triage" className="bg-paper-dim border-y border-ink scroll-mt-16">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20">
-        <SectionHead index="02" title="Case Study" sub="Hospition.IT — 1st place" />
+        <SectionHead index="02" title="Case Study" sub="Hospition.IT, 1st place" />
         <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-16 items-start">
           <Reveal>
             <div className="inline-flex items-center gap-2 border border-accent text-accent px-3 py-1 kicker mb-6">
@@ -365,7 +377,7 @@ function Triage() {
             </p>
             <p className="font-sans text-ink/70 leading-relaxed mb-8">
               It combined requirements analysis, logic modelling and a usable prototype for clinical decision support.
-              The panel on the right is that same model — rebuilt so you can try it. Toggle findings and watch the
+              The interactive panel is that same model, rebuilt so you can try it. Toggle findings and watch the
               priority recompute in real time.
             </p>
             <ul className="space-y-2 font-mono text-sm text-ink/70">
@@ -377,7 +389,7 @@ function Triage() {
           <Reveal delay={0.12}>
             <TriageEngine />
             <p className="mt-4 font-mono text-[0.68rem] text-ink/40 leading-relaxed">
-              * Illustrative model for portfolio purposes — not for real clinical use.
+              * Illustrative model for portfolio purposes. Not for real clinical use.
             </p>
           </Reveal>
         </div>
@@ -393,7 +405,7 @@ function Work() {
       <div className="border-t border-ink">
         {WORK.map((w, i) => (
           <Reveal key={i}>
-            <div className="group grid grid-cols-1 md:grid-cols-[0.9fr_1.3fr_auto] gap-2 md:gap-8 items-baseline py-7 border-b border-ink/20 hover:border-ink transition-colors relative">
+            <div className="group grid grid-cols-1 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)_9rem] gap-2 md:gap-8 items-baseline py-7 border-b border-ink/20 hover:border-ink transition-colors relative">
               <div className="absolute left-0 top-0 h-full w-[3px] bg-accent scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-300 -translate-x-5 hidden md:block" />
               <div>
                 <span className="font-mono text-xs text-ink/50">{w.period}</span>
@@ -402,7 +414,7 @@ function Work() {
               <div>
                 <h3 className="font-display text-2xl sm:text-3xl leading-tight group-hover:translate-x-1 transition-transform">
                   {w.role}
-                  <span className="text-ink/40"> — {w.org}</span>
+                  <span className="text-ink/40"> / {w.org}</span>
                 </h3>
                 <p className="font-sans text-ink/65 leading-relaxed mt-2 max-w-2xl">{w.desc}</p>
               </div>
@@ -471,7 +483,7 @@ function Credentials() {
                   <h3 className="font-display text-2xl leading-tight group-hover:text-accent transition-colors">{e.school}</h3>
                   <p className="font-sans text-ink/60 text-sm mt-1">{e.detail}</p>
                 </div>
-                <span className="font-mono text-xs text-ink/50 shrink-0">{e.year}</span>
+                {e.year && <span className="font-mono text-xs text-ink/50 shrink-0">{e.year}</span>}
               </div>
             ))}
           </div>
@@ -498,9 +510,23 @@ function Credentials() {
 
 function Contact() {
   const links = [
-    { label: "Email", value: "Yosefsafi@hotmail.com", href: "mailto:Yosefsafi@hotmail.com" },
-    { label: "Phone", value: "076-053 65 57", href: "tel:+46760536557" },
-    { label: "LinkedIn", value: "in/yosef-safi", href: "https://www.linkedin.com/in/yosef-safi-6b6257248/", ext: true },
+    {
+      label: "Email",
+      value: <>GustavSafi<wbr />@hotmail.com</>,
+      href: "mailto:GustavSafi@hotmail.com",
+    },
+    {
+      label: "GitHub",
+      value: <>github.com/<wbr />GustavSafi</>,
+      href: "https://github.com/GustavSafi",
+      ext: true,
+    },
+    {
+      label: "LinkedIn",
+      value: <>in/<wbr />gustav-safi</>,
+      href: "https://www.linkedin.com/in/gustav-safi-6b6257248/",
+      ext: true,
+    },
   ];
   return (
     <footer id="contact" className="bg-ink text-paper scroll-mt-16">
@@ -528,8 +554,8 @@ function Contact() {
               className="group border-b md:border-b-0 md:border-r border-paper/25 last:border-r-0 p-6 sm:p-8 hover:bg-accent transition-colors"
             >
               <span className="kicker text-paper/50 group-hover:text-paper/80 block mb-3">{l.label}</span>
-              <span className="font-display text-xl sm:text-2xl break-all flex items-center gap-2">
-                {l.value}
+              <span className="font-display text-xl sm:text-2xl break-words flex items-center gap-2">
+                <span className="min-w-0">{l.value}</span>
                 <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">↗</span>
               </span>
             </a>
@@ -537,7 +563,7 @@ function Contact() {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between gap-3 mt-12 pt-6 border-t border-paper/25 font-mono text-[0.68rem] text-paper/45">
-          <span>© 2026 Yosef Safi — Göteborg, Sweden</span>
+          <span>© 2026 Gustav Safi · Göteborg, Sweden</span>
           <span>Designed &amp; built from scratch · No templates</span>
         </div>
       </div>

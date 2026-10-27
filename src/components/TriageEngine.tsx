@@ -4,10 +4,10 @@ import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /*
-  A faithful, interactive recreation of the decision engine Yosef built for the
+  A faithful, interactive recreation of the decision engine Gustav built for the
   Hospition.IT hackathon (1st place): a weighted-symptom model that categorises
   ophthalmology cases by clinical priority. Red-flag findings override the
-  additive score — exactly the kind of logic modelling the prototype demonstrated.
+  additive score, exactly the kind of logic modelling the prototype demonstrated.
 */
 
 type Symptom = {
@@ -38,7 +38,7 @@ type Tier = {
 };
 
 const TIERS: Record<string, Tier> = {
-  emergent: { key: "emergent", label: "EMERGENT", action: "See immediately — refer to emergency care", color: "var(--color-accent)" },
+  emergent: { key: "emergent", label: "EMERGENT", action: "See immediately and refer to emergency care", color: "var(--color-accent)" },
   urgent: { key: "urgent", label: "URGENT", action: "Assess within 24 hours", color: "var(--color-amber)" },
   semi: { key: "semi", label: "SEMI-URGENT", action: "Book within one week", color: "var(--color-emerald)" },
   routine: { key: "routine", label: "ROUTINE", action: "Schedule a standard appointment", color: "rgba(22,21,15,0.55)" },
@@ -75,9 +75,9 @@ export default function TriageEngine() {
   const meter = Math.min(100, Math.round((score / 90) * 100));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] border border-ink">
+    <div className="grid grid-cols-1 xl:grid-cols-[1.05fr_0.95fr] border border-ink">
       {/* ---- INPUT: symptom matrix ---- */}
-      <div className="p-6 sm:p-8 lg:border-r border-ink border-b lg:border-b-0">
+      <div className="p-6 sm:p-8 xl:border-r border-ink border-b xl:border-b-0">
         <div className="flex items-baseline justify-between mb-6">
           <span className="kicker text-ink/60">Findings</span>
           <span className="font-mono text-[0.68rem] text-ink/45">weight →</span>
@@ -95,27 +95,29 @@ export default function TriageEngine() {
                   on ? "bg-ink text-paper" : "bg-paper hover:bg-paper-dim text-ink"
                 }`}
               >
-                <span className="flex items-center gap-3 min-w-0">
+                <span className="flex items-start gap-3 min-w-0">
                   <span
-                    className={`grid place-items-center h-4 w-4 shrink-0 border ${
+                    className={`grid place-items-center h-4 w-4 mt-0.5 shrink-0 border ${
                       on ? "border-paper" : "border-ink/40"
                     }`}
                   >
                     {on && <span className="h-2 w-2 bg-accent" />}
                   </span>
-                  <span className="font-sans text-[0.92rem] truncate">{s.label}</span>
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+                  <span className="font-sans text-[0.92rem] leading-snug">{s.label}</span>
                   {s.redFlag && (
                     <span
-                      className={`kicker text-[0.5rem] tracking-[0.2em] px-1.5 py-0.5 border ${
+                      className={`kicker text-[0.5rem] tracking-[0.2em] px-1.5 py-0.5 border whitespace-nowrap ${
                         on ? "border-paper/50 text-paper" : "border-accent text-accent"
                       }`}
                     >
                       RED FLAG
                     </span>
                   )}
+                  </span>
                 </span>
                 <span
-                  className={`font-mono text-sm tabular-nums ${
+                  className={`font-mono text-sm tabular-nums shrink-0 ${
                     on ? "text-paper" : "text-ink/45"
                   }`}
                 >

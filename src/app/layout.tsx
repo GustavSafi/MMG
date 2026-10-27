@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Yosef Safi — .NET Cloud Developer",
+  title: "Gustav Safi | .NET Cloud Developer",
   description:
-    "Yosef Safi, a .NET Cloud developer in Göteborg building stable back-ends, cloud infrastructure on Azure, and practical AI systems. Hackathon winner and freelance engineer.",
+    "Gustav Safi, a .NET Cloud developer in Göteborg building stable back-ends, cloud infrastructure on Azure, and practical AI systems. Hackathon winner and freelance engineer.",
   keywords: [
-    "Yosef Safi",
+    "Gustav Safi",
     ".NET Cloud Developer",
     "C#",
     "Azure",
@@ -14,12 +14,14 @@ export const metadata: Metadata = {
     "Software Engineer",
     "Göteborg",
     "AI",
+    "LLM",
+    "AI Agents",
   ],
-  authors: [{ name: "Yosef Safi" }],
+  authors: [{ name: "Gustav Safi" }],
   openGraph: {
-    title: "Yosef Safi — .NET Cloud Developer",
+    title: "Gustav Safi | .NET Cloud Developer",
     description:
-      "Building stable systems — from cloud back-ends to the AI logic that runs on top of them.",
+      "Building stable systems, from cloud back-ends to the AI logic that runs on top of them.",
     type: "website",
     locale: "en_US",
   },
