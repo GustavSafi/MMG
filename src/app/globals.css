@@ -107,7 +107,7 @@ body {
 @media (max-width: 639px) {
   .sg-name { font-size: 23px; }
   .sg-sub { display: none; }
-  .ab-name { font-size: 24px; }
+  .ab-name { font-size: 22px; }
   .ab-sub { display: none; }
 }
 

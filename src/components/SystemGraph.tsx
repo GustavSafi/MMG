@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Play, RotateCcw } from "lucide-react";
+import { GitCommitHorizontal, Play } from "lucide-react";
 import { lerp, tween, useMotionOk, wait, type Pt } from "@/lib/anim";
 
 /*
@@ -41,23 +41,40 @@ const AMBIENT: { path: Id[]; dur: number; begin: number; hue: "c" | "v" }[] = [
   { path: ["client", "api", "azure"], dur: 3.4, begin: 5.2, hue: "c" },
 ];
 
-/* One request, hop by hop. `ms` is the simulated time the hop takes. */
-const JOURNEY: { to: Id; ms: number; log: string }[] = [
-  { to: "api", ms: 18, log: "API: request authenticated, rate limit OK" },
-  { to: "agent", ms: 40, log: "Agent: planning how to answer" },
-  { to: "rag", ms: 95, log: "RAG: 3 relevant documents retrieved" },
-  { to: "agent", ms: 12, log: "Agent: context added to the prompt" },
-  { to: "tools", ms: 160, log: "Tool call: get_order_status(order: 4821)" },
-  { to: "azure", ms: 120, log: "Cloud: serverless function returned the order" },
-  { to: "api", ms: 380, log: "API: model answer validated against the schema" },
-  { to: "client", ms: 15, log: "Done: 200 OK" },
-];
+/* Two journeys through the graph. `t` is the simulated time each hop takes. */
+type Journey = { start: Id; unit: "ms" | "s"; first?: string; hops: { to: Id; t: number; log: string }[] };
+
+const REQUEST: Journey = {
+  start: "client",
+  unit: "ms",
+  hops: [
+    { to: "api", t: 18, log: "API: request authenticated, rate limit OK" },
+    { to: "agent", t: 40, log: "Agent: planning how to answer" },
+    { to: "rag", t: 95, log: "RAG: 3 relevant documents retrieved" },
+    { to: "agent", t: 12, log: "Agent: context added to the prompt" },
+    { to: "tools", t: 160, log: "Tool call: get_order_status(order: 4821)" },
+    { to: "azure", t: 120, log: "Cloud: serverless function returned the order" },
+    { to: "api", t: 380, log: "API: model answer validated against the schema" },
+    { to: "client", t: 15, log: "Done: 200 OK" },
+  ],
+};
+
+const DEPLOY: Journey = {
+  start: "cicd",
+  unit: "s",
+  first: "CI/CD: commit built, 142 tests passed, image pushed",
+  hops: [
+    { to: "azure", t: 48, log: "Cloud: new containers started, old ones drained" },
+    { to: "api", t: 9, log: "APIs: new version serving traffic, no downtime" },
+    { to: "client", t: 1, log: "Done: users are on the new version" },
+  ],
+};
 
 const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<Id, N>;
 const d = (ids: Id[]) => ids.map((id, i) => `${i ? "L" : "M"}${byId[id].x} ${byId[id].y}`).join(" ");
 const edgeKey = (a: Id, b: Id) => [a, b].sort().join("-");
 
-type LogLine = { t: number; text: string };
+type LogLine = { t: number; text: string; unit: "ms" | "s" };
 
 export default function SystemGraph({ className = "" }: { className?: string }) {
   const motionOk = useMotionOk();
@@ -70,27 +87,27 @@ export default function SystemGraph({ className = "" }: { className?: string }) 
 
   useEffect(() => () => void (runId.current += 1), []);
 
-  const send = async () => {
+  const run = async (j: Journey) => {
     const id = ++runId.current;
     const cancelled = () => runId.current !== id;
     setRunning(true);
-    setLog([]);
     setLit(new Set());
-    setAt("client");
-    let from: Id = "client";
+    setAt(j.start);
+    setLog(j.first ? [{ t: 0, text: j.first, unit: j.unit }] : []);
+    let from: Id = j.start;
     let elapsed = 0;
-    for (const hop of JOURNEY) {
+    for (const hop of j.hops) {
       const a = byId[from];
       const b = byId[hop.to];
       if (motionOk) {
         const ok = await tween(650, (t) => setDot(lerp(a, b, t)), cancelled);
         if (!ok) return;
       }
-      elapsed += hop.ms;
+      elapsed += hop.t;
       const key = edgeKey(from, hop.to);
       setLit((s) => new Set(s).add(key));
       setAt(hop.to);
-      setLog((l) => [...l, { t: elapsed, text: hop.log }]);
+      setLog((l) => [...l, { t: elapsed, text: hop.log, unit: j.unit }]);
       from = hop.to;
       if (motionOk && !(await wait(180, cancelled))) return;
     }
@@ -204,26 +221,41 @@ export default function SystemGraph({ className = "" }: { className?: string }) 
 
       <div className="mt-2 rounded-2xl border border-line bg-night/60 backdrop-blur-sm p-4">
         <div className="flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={send}
-            disabled={running}
-            className="inline-flex items-center gap-2 rounded-full border border-cyan/50 bg-cyan/10 px-4 py-2 text-sm font-medium text-cyan hover:bg-cyan/20 disabled:opacity-50 transition-colors"
-          >
-            {log.length && !running ? <RotateCcw className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
-            {running ? "Sending…" : log.length ? "Send another" : "Send a request"}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => run(REQUEST)}
+              disabled={running}
+              className="inline-flex items-center gap-2 rounded-full border border-cyan/50 bg-cyan/10 px-4 py-2 text-sm font-medium text-cyan hover:bg-cyan/20 disabled:opacity-50 transition-colors"
+            >
+              <Play className="h-4 w-4" aria-hidden="true" />
+              Send a request
+            </button>
+            <button
+              type="button"
+              onClick={() => run(DEPLOY)}
+              disabled={running}
+              className="inline-flex items-center gap-2 rounded-full border border-violet/50 bg-violet/10 px-4 py-2 text-sm font-medium text-violet hover:bg-violet/20 disabled:opacity-50 transition-colors"
+            >
+              <GitCommitHorizontal className="h-4 w-4" aria-hidden="true" />
+              Deploy a change
+            </button>
+          </div>
           {log.length > 0 && (
-            <span className="text-sm tabular-nums text-faint">{log[log.length - 1].t} ms</span>
+            <span className="text-sm tabular-nums text-faint">
+              {log[log.length - 1].t} {log[log.length - 1].unit}
+            </span>
           )}
         </div>
         <ol className="mt-3 min-h-[2.5rem] lg:h-[11.5rem] lg:min-h-0 overflow-hidden text-[0.82rem] leading-relaxed" aria-live="polite">
           {log.length === 0 ? (
-            <li className="text-faint">Follow one request through the system, hop by hop.</li>
+            <li className="text-faint">Follow a request, or a new release, through the system hop by hop.</li>
           ) : (
             log.map((l, i) => (
               <li key={i} className="flex gap-3">
-                <span className="w-14 shrink-0 text-right tabular-nums text-faint">+{l.t} ms</span>
+                <span className="w-14 shrink-0 text-right tabular-nums text-faint">
+                  +{l.t} {l.unit}
+                </span>
                 <span className={i === log.length - 1 ? "text-fg" : "text-muted"}>{l.text}</span>
               </li>
             ))

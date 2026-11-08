@@ -166,7 +166,7 @@ export default function Home() {
       <Demo
         id="pipeline"
         title="Ship a release"
-        intro="This is the kind of pipeline I set up in Azure DevOps and GitHub Actions. Push a commit and watch it build, test and deploy. If the new version fails its health check, production rolls back on its own."
+        intro="This is the kind of pipeline I set up in Azure DevOps and GitHub Actions. Write a commit, choose how it rolls out and what should go wrong. A live error-rate check decides whether the release stays or is rolled back on its own."
       >
         <Pipeline />
       </Demo>

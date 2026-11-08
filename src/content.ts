@@ -10,8 +10,8 @@ export const CONTACT = {
 
 export const HIGHLIGHTS = [
   { value: "1st place", label: "Hospition.IT hackathon, Dec 2025" },
-  { value: "Team of 5", label: "Led as Cloud Team Lead at Podmanager" },
-  { value: "YH diploma", label: ".NET Cloud Developer, IT-Högskolan 2026" },
+  { value: "US client", label: "Sole developer of a live e-commerce system" },
+  { value: "Own LLM service", label: "Self-hosted model with swappable LoRA adapters" },
 ];
 
 export const ABOUT = [
