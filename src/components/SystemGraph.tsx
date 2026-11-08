@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 
 /*
   The kind of system Gustav builds, drawn as a graph: a client calls an
-  API layer, the API hands work to an LLM agent with retrieval and tools,
+  API, the API hands work to an LLM agent with retrieval and tools,
   and it all runs in the cloud, shipped by a CI/CD pipeline.
   Edges draw in once on load, then requests travel along them.
 */
@@ -13,12 +13,12 @@ type N = { id: string; x: number; y: number; name: string; sub: string; hue: "c"
 
 const NODES: N[] = [
   { id: "client", x: 105, y: 95, name: "Client", sub: "Web and mobile apps", hue: "c", at: "above" },
-  { id: "api", x: 265, y: 195, name: "API layer", sub: "REST, auth, rate limits", hue: "c", at: "right" },
-  { id: "agent", x: 465, y: 115, name: "LLM agent", sub: "Hosted or self-hosted models", hue: "v", at: "above" },
+  { id: "api", x: 265, y: 195, name: "APIs", sub: "REST, auth, rate limits", hue: "c", at: "right" },
+  { id: "agent", x: 465, y: 115, name: "LLM agent", sub: "Any model, any provider", hue: "v", at: "above" },
   { id: "rag", x: 500, y: 300, name: "RAG", sub: "Embeddings, vector search", hue: "v" },
   { id: "tools", x: 380, y: 425, name: "Tools", sub: "APIs and functions", hue: "v" },
   { id: "azure", x: 185, y: 395, name: "Cloud", sub: "Containers, serverless, data", hue: "c" },
-  { id: "cicd", x: 80, y: 260, name: "CI/CD", sub: "Pipelines, Docker, IaC", hue: "c", at: "above" },
+  { id: "cicd", x: 80, y: 260, name: "CI/CD", sub: "DevOps, Docker, IaC", hue: "c", at: "above" },
 ];
 
 const EDGES: [string, string][] = [
