@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "@fontsource-variable/inter/opsz.css";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const title = "Gustav Safi | AI & Cloud Engineer";
 const description =
@@ -8,7 +11,7 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gustavsafi.se"),
-  title,
+  title: { default: title, template: "%s | Gustav Safi" },
   description,
   keywords: [
     "Gustav Safi",
@@ -64,7 +67,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className="antialiased">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
-        {children}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-raised focus:px-4 focus:py-2"
+        >
+          Skip to content
+        </a>
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
+        <Analytics />
       </body>
     </html>
   );

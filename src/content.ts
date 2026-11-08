@@ -14,6 +14,13 @@ export const HIGHLIGHTS = [
   { value: "YH diploma", label: ".NET Cloud Developer, IT-Högskolan 2026" },
 ];
 
+export const ABOUT = [
+  "I started at Volvo Cars when I was 18 and still in upper secondary school. The money was good, but it didn't take long before I knew I wasn't going to build the same cars for the rest of my life. School has always come easily to me and I'm a creative person, so I wanted work where I use my head more than my hands.",
+  "IT was the obvious choice, even if I didn't know exactly where in it I belonged. I took Harvard's CS50x in early 2023, and for a while I was set on cyber security. In the end I chose the .NET Cloud Developer programme at IT-Högskolan instead. I learned a lot there and always had a few small projects going on the side.",
+  "Early on I got a job annotating data for AI models, and I still do it today. When AI took off I started getting clients of my own as well, and the freelance work grew until I had a client in the US.",
+  "What I enjoy most is the variety. Going from doing the same thing on every car to having new problems to solve all the time is what makes this work rewarding for me.",
+];
+
 export const CAPABILITIES = [
   {
     title: "AI agents and LLM features",
@@ -147,7 +154,7 @@ export const EDUCATION = [
 ];
 
 export const EXTRAS = [
-  { k: "Languages", v: "Swedish (native), English (fluent), Pashto (fluent)" },
+  { k: "Languages", v: "Swedish (native), English (fluent)" },
   { k: "Young Enterprise (UF)", v: "CEO and Head of Sales" },
   { k: "Licence", v: "Swedish driving licence, B" },
 ];
