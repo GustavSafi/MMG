@@ -4,7 +4,7 @@ import "./globals.css";
 
 const title = "Gustav Safi | AI & Cloud Engineer";
 const description =
-  "Gustav Safi is an AI and cloud engineer. He builds AI agents and LLM features, the ASP.NET Core APIs around them and the Azure infrastructure they run on.";
+  "Gustav Safi is an AI and cloud engineer. He builds AI agents and LLM features, the APIs around them and the cloud infrastructure they run on.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gustavsafi.se"),
@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     "AI Agents",
     "LLM",
     "RAG",
+    "Cloud",
+    "Kubernetes",
+    "Terraform",
     "Azure",
     ".NET",
     "C#",

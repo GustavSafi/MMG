@@ -110,8 +110,8 @@ function Hero() {
             I build AI agents and the cloud they run on.
           </h1>
           <p className="mt-7 text-lg text-muted leading-relaxed max-w-[34rem]">
-            I take AI features all the way to production: the agent and its prompts, the ASP.NET Core API in front of it,
-            and the Azure infrastructure and pipelines that keep it running.
+            I take AI features all the way to production: the agent and its prompts, the API in front of it, and the
+            cloud infrastructure and pipelines that keep it running.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a

@@ -21,14 +21,14 @@ export const CAPABILITIES = [
     tools: ["LangChain", "LangGraph", "OpenAI API", "Claude API", "RAG", "Pinecone", "LoRA"],
   },
   {
-    title: "Cloud and DevOps on Azure",
-    text: "Infrastructure as code, containers and pipelines that build and deploy the same way every time. I have set up Kubernetes clusters, provisioned with Terraform and run a client's production system on App Service.",
-    tools: ["Azure", "AKS", "Docker", "Terraform", "Bicep", "Azure DevOps", "GitHub Actions"],
+    title: "Cloud and DevOps",
+    text: "Infrastructure as code, containers and pipelines that build and deploy the same way every time. I have set up Kubernetes clusters, provisioned infrastructure with Terraform and run a client's production system in the cloud. Most of that work has been on Azure, and the same tools and patterns carry over to any provider.",
+    tools: ["Kubernetes", "Docker", "Terraform", "CI/CD pipelines", "GitHub Actions", "Serverless", "Azure"],
   },
   {
     title: "Integrations and back-end",
-    text: "The layer that holds it together: ASP.NET Core APIs between clients and AI services, payment providers, message queues and the databases underneath.",
-    tools: ["C#", ".NET", "ASP.NET Core", "FastAPI", "SQL Server", "RabbitMQ", "REST"],
+    text: "The layer that holds it together: APIs between clients and AI services, payment providers, message queues and the databases underneath, in whichever language the system needs.",
+    tools: ["REST APIs", "C# and .NET", "Python and FastAPI", "TypeScript and Node.js", "SQL and NoSQL", "RabbitMQ", "Microservices"],
   },
 ];
 
