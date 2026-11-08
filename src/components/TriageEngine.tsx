@@ -4,10 +4,10 @@ import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /*
-  A faithful, interactive recreation of the decision engine Gustav built for the
+  An interactive recreation of the decision engine Gustav built for the
   Hospition.IT hackathon (1st place): a weighted-symptom model that categorises
   ophthalmology cases by clinical priority. Red-flag findings override the
-  additive score, exactly the kind of logic modelling the prototype demonstrated.
+  additive score.
 */
 
 type Symptom = {
@@ -18,31 +18,26 @@ type Symptom = {
 };
 
 const SYMPTOMS: Symptom[] = [
-  { id: "chemical", label: "Chemical splash / burn", weight: 55, redFlag: true },
+  { id: "chemical", label: "Chemical splash or burn", weight: 55, redFlag: true },
   { id: "sudden", label: "Sudden vision loss", weight: 50, redFlag: true },
   { id: "penetrating", label: "Penetrating eye trauma", weight: 50, redFlag: true },
-  { id: "curtain", label: "Curtain / shadow over vision", weight: 34 },
+  { id: "curtain", label: "Curtain or shadow over vision", weight: 34 },
   { id: "pain", label: "Severe eye pain", weight: 30 },
-  { id: "flashes", label: "New flashes & floaters", weight: 28 },
+  { id: "flashes", label: "New flashes and floaters", weight: 28 },
   { id: "halos", label: "Halos around lights", weight: 22 },
   { id: "redness", label: "Red, irritated eye", weight: 10 },
   { id: "blur", label: "Gradual blurring", weight: 8 },
-  { id: "discharge", label: "Discharge / itching", weight: 6 },
+  { id: "discharge", label: "Discharge or itching", weight: 6 },
 ];
 
-type Tier = {
-  key: string;
-  label: string;
-  action: string;
-  color: string;
-};
+type Tier = { key: string; label: string; action: string; color: string };
 
 const TIERS: Record<string, Tier> = {
-  emergent: { key: "emergent", label: "EMERGENT", action: "See immediately and refer to emergency care", color: "var(--color-accent)" },
-  urgent: { key: "urgent", label: "URGENT", action: "Assess within 24 hours", color: "var(--color-amber)" },
-  semi: { key: "semi", label: "SEMI-URGENT", action: "Book within one week", color: "var(--color-emerald)" },
-  routine: { key: "routine", label: "ROUTINE", action: "Schedule a standard appointment", color: "rgba(22,21,15,0.55)" },
-  idle: { key: "idle", label: "AWAITING INPUT", action: "Select the findings present to compute priority", color: "rgba(22,21,15,0.35)" },
+  emergent: { key: "emergent", label: "Emergent", action: "See immediately and refer to emergency care", color: "#F87171" },
+  urgent: { key: "urgent", label: "Urgent", action: "Assess within 24 hours", color: "#FBBF24" },
+  semi: { key: "semi", label: "Semi-urgent", action: "Book within one week", color: "#34D399" },
+  routine: { key: "routine", label: "Routine", action: "Schedule a standard appointment", color: "#9AA6C4" },
+  idle: { key: "idle", label: "No findings yet", action: "Select the findings present to compute a priority", color: "#66769A" },
 };
 
 function classify(score: number, hasRedFlag: boolean): Tier {
@@ -61,7 +56,8 @@ export default function TriageEngine() {
   const toggle = (id: string) =>
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
 
@@ -75,165 +71,126 @@ export default function TriageEngine() {
   const meter = Math.min(100, Math.round((score / 90) * 100));
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-[1.05fr_0.95fr] border border-ink">
-      {/* ---- INPUT: symptom matrix ---- */}
-      <div className="p-6 sm:p-8 xl:border-r border-ink border-b xl:border-b-0">
-        <div className="flex items-baseline justify-between mb-6">
-          <span className="kicker text-ink/60">Findings</span>
-          <span className="font-mono text-[0.68rem] text-ink/45">weight →</span>
+    <div className="grid grid-cols-1 xl:grid-cols-[1.05fr_0.95fr] rounded-2xl border border-line bg-deep/80 overflow-hidden">
+      {/* Input */}
+      <div className="p-5 sm:p-7 xl:border-r border-b xl:border-b-0 border-line">
+        <div className="flex items-baseline justify-between mb-4">
+          <h4 className="text-sm font-semibold text-fg">Findings</h4>
+          <span className="text-xs text-faint">Weight</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-px bg-ink/15 border border-ink/15">
+        <div className="flex flex-col gap-1.5">
           {SYMPTOMS.map((s) => {
             const on = selected.has(s.id);
             return (
               <button
                 key={s.id}
+                type="button"
                 onClick={() => toggle(s.id)}
                 aria-pressed={on}
-                className={`group flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors duration-150 ${
-                  on ? "bg-ink text-paper" : "bg-paper hover:bg-paper-dim text-ink"
+                className={`flex items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left transition-colors ${
+                  on ? "border-violet/60 bg-violet/15 text-fg" : "border-line bg-night/40 text-muted hover:border-faint hover:text-fg"
                 }`}
               >
-                <span className="flex items-start gap-3 min-w-0">
+                <span className="flex items-center gap-3 min-w-0">
                   <span
-                    className={`grid place-items-center h-4 w-4 mt-0.5 shrink-0 border ${
-                      on ? "border-paper" : "border-ink/40"
+                    className={`grid place-items-center h-4 w-4 shrink-0 rounded border ${
+                      on ? "border-violet bg-violet" : "border-faint"
                     }`}
                   >
-                    {on && <span className="h-2 w-2 bg-accent" />}
+                    {on && (
+                      <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
+                        <path d="M2.5 6.2 5 8.6l4.5-5" fill="none" stroke="#060A14" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
                   </span>
-                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
-                  <span className="font-sans text-[0.92rem] leading-snug">{s.label}</span>
+                  <span className="text-[0.92rem] leading-snug">{s.label}</span>
                   {s.redFlag && (
-                    <span
-                      className={`kicker text-[0.5rem] tracking-[0.2em] px-1.5 py-0.5 border whitespace-nowrap ${
-                        on ? "border-paper/50 text-paper" : "border-accent text-accent"
-                      }`}
-                    >
-                      RED FLAG
+                    <span className="shrink-0 rounded-full bg-red-400/15 px-2 py-0.5 text-[0.68rem] font-medium text-red-300">
+                      Red flag
                     </span>
                   )}
-                  </span>
                 </span>
-                <span
-                  className={`font-mono text-sm tabular-nums shrink-0 ${
-                    on ? "text-paper" : "text-ink/45"
-                  }`}
-                >
-                  {String(s.weight).padStart(2, "0")}
-                </span>
+                <span className="tabular-nums text-sm text-faint">{s.weight}</span>
               </button>
             );
           })}
         </div>
 
         <button
+          type="button"
           onClick={() => setSelected(new Set())}
-          className="mt-5 kicker text-ink/45 hover:text-accent transition-colors"
+          className="mt-4 text-sm text-muted underline-offset-4 hover:text-cyan hover:underline"
         >
-          ↺ Reset case
+          Clear findings
         </button>
       </div>
 
-      {/* ---- OUTPUT: computed priority ---- */}
-      <div className="p-6 sm:p-8 flex flex-col bg-paper-dim">
-        <div className="flex items-baseline justify-between mb-6">
-          <span className="kicker text-ink/60">Computed priority</span>
-          <span className="font-mono text-[0.68rem] text-ink/45">engine v1</span>
+      {/* Output */}
+      <div className="p-5 sm:p-7 flex flex-col" aria-live="polite">
+        <h4 className="text-sm font-semibold text-fg mb-5">Priority</h4>
+
+        <div className="mb-7 min-h-[5.5rem]">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={tier.key}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className={`font-semibold tracking-tight leading-none ${tier.key === "idle" ? "text-2xl" : "text-4xl sm:text-5xl"}`}
+              style={{ color: tier.color }}
+            >
+              {tier.label}
+            </motion.p>
+          </AnimatePresence>
+          <p className="mt-3 text-sm text-muted">{tier.action}</p>
         </div>
 
-        {/* Big verdict */}
-        <div className="mb-8">
-          <div className="flex items-end gap-4">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={tier.key}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-                className="font-display text-4xl sm:text-5xl leading-none"
-                style={{ color: tier.color }}
-              >
-                {tier.label}
-              </motion.span>
-            </AnimatePresence>
-          </div>
-          <p className="mt-3 font-mono text-sm text-ink/70">{tier.action}</p>
-        </div>
-
-        {/* Score */}
         <div className="flex items-baseline gap-3 mb-3">
-          <motion.span
-            key={score}
-            initial={{ opacity: 0.4 }}
-            animate={{ opacity: 1 }}
-            className="font-display text-6xl tabular-nums"
-          >
-            {String(score).padStart(2, "0")}
-          </motion.span>
-          <span className="font-mono text-xs text-ink/50 uppercase tracking-widest">
-            weighted score
-          </span>
+          <span className="text-5xl font-semibold tabular-nums tracking-tight">{score}</span>
+          <span className="text-sm text-faint">weighted score</span>
         </div>
 
-        {/* Meter */}
-        <div className="h-2 w-full bg-ink/10 mb-2 overflow-hidden">
+        <div className="h-1.5 w-full rounded-full bg-line mb-2 overflow-hidden">
           <motion.div
-            className="h-full"
+            className="h-full rounded-full"
             style={{ background: tier.color }}
             animate={{ width: `${meter}%` }}
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
           />
         </div>
 
-        {/* Tier scale */}
-        <div className="grid grid-cols-4 gap-px mb-8">
+        <div className="grid grid-cols-4 gap-1 mb-7">
           {TIER_ORDER.map((k) => {
             const t = TIERS[k];
             const isActive = tier.key === k;
             return (
-              <div
+              <span
                 key={k}
-                className="text-center py-1 border-t-2 transition-colors"
-                style={{
-                  borderColor: isActive ? t.color : "var(--hair)",
-                }}
+                className="text-center text-[0.7rem] pt-1.5 border-t-2 transition-colors"
+                style={{ borderColor: isActive ? t.color : "#222C52", color: isActive ? t.color : "#66769A" }}
               >
-                <span
-                  className="font-mono text-[0.55rem] tracking-[0.15em] uppercase"
-                  style={{ color: isActive ? t.color : "rgba(22,21,15,0.4)" }}
-                >
-                  {t.label.split("-")[0]}
-                </span>
-              </div>
+                {t.label}
+              </span>
             );
           })}
         </div>
 
-        {/* Logic trace */}
-        <div className="mt-auto border-t border-ink/15 pt-4">
-          <span className="kicker text-ink/45 block mb-2">Logic trace</span>
-          <div className="font-mono text-xs text-ink/70 space-y-1 min-h-[3.5rem]">
+        <div className="mt-auto border-t border-line pt-4">
+          <h5 className="text-xs font-medium text-faint mb-2">How the score was reached</h5>
+          <div className="text-sm text-muted space-y-1 min-h-[3.5rem]">
             {active.length === 0 ? (
-              <span className="text-ink/40">// no findings selected</span>
+              <p className="text-faint">Nothing selected.</p>
             ) : (
               <>
                 {active.map((s) => (
-                  <div key={s.id} className="flex justify-between">
-                    <span className="truncate">
-                      {s.redFlag ? "⚑ " : "+ "}
-                      {s.label}
-                    </span>
-                    <span className="tabular-nums pl-2">+{s.weight}</span>
+                  <div key={s.id} className="flex justify-between gap-2">
+                    <span className="truncate">{s.label}</span>
+                    <span className="tabular-nums">+{s.weight}</span>
                   </div>
                 ))}
-                {hasRedFlag && (
-                  <div className="text-accent">
-                    ⚑ red-flag override → force EMERGENT
-                  </div>
-                )}
+                {hasRedFlag && <p className="text-red-300">A red flag forces Emergent, whatever the score.</p>}
               </>
             )}
           </div>

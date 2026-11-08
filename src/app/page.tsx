@@ -1,570 +1,384 @@
-"use client";
-
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useSpring, useInView } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import HeroNetwork from "@/components/HeroNetwork";
+import SystemGraph from "@/components/SystemGraph";
 import TriageEngine from "@/components/TriageEngine";
-
-/* ------------------------------------------------------------------ */
-/*  DATA: grounded strictly in Gustav's CV                            */
-/* ------------------------------------------------------------------ */
+import {
+  CAPABILITIES,
+  CONTACT,
+  EDUCATION,
+  EXPERIENCE,
+  EXTRAS,
+  HIGHLIGHTS,
+  PROJECTS,
+  STACK,
+} from "@/content";
 
 const NAV = [
-  { id: "profile", label: "Profile" },
-  { id: "triage", label: "Case Study" },
-  { id: "work", label: "Work" },
+  { id: "work", label: "What I do" },
+  { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
   { id: "stack", label: "Stack" },
-  { id: "credentials", label: "Credentials" },
-  { id: "contact", label: "Contact" },
 ];
-
-const STATS = [
-  { n: "1st", label: "Place, Hospition.IT hackathon" },
-  { n: "05", label: "Engineers led at Podmanager" },
-  { n: "03", label: "Languages spoken fluently" },
-  { n: "'24", label: "Freelancing since" },
-];
-
-const WORK = [
-  {
-    period: "Sep 2025 – Nov 2025",
-    role: "Cloud Team Lead",
-    org: "Podmanager",
-    type: "Internship",
-    desc: "Led a team of five, introducing Azure and DevOps ways of working. Coached the group and followed up on delivery.",
-    tags: ["Azure", "DevOps", "Leadership"],
-  },
-  {
-    period: "Feb 2025 – Present",
-    role: "AI Data Annotation",
-    org: "Koikco",
-    type: "Remote contract",
-    desc: "Contributed to AI model development by annotating images and conversational data in Swedish, with a focus on quality and labelling accuracy.",
-    tags: ["AI", "Data", "Swedish NLP"],
-  },
-  {
-    period: "Aug 2024 – Present",
-    role: "Freelance Developer",
-    org: "Upwork & direct clients",
-    type: "Self-employed",
-    desc: "Build websites and code solutions for companies through Upwork and my own client relationships, from scoping to delivery.",
-    tags: ["Web", "Client work", "Full-stack"],
-  },
-  {
-    period: "Jan 2024 – Jan 2025",
-    role: "Staffing Consultant",
-    org: "Jovi",
-    type: "On-site",
-    desc: "Production work in a factory environment with a focus on technical troubleshooting of machinery during faults and disruptions.",
-    tags: ["Troubleshooting", "Production"],
-  },
-  {
-    period: "Jun 2021 – Sep 2023",
-    role: "Vehicle Assembler",
-    org: "Volvo Cars",
-    type: "On-site",
-    desc: "Assembled car parts in the body plant and assisted with machine faults through hands-on troubleshooting and electronics replacement.",
-    tags: ["Precision", "Electronics"],
-  },
-];
-
-const STACK = [
-  {
-    group: "Back-end & Cloud",
-    items: [".NET", "C#", "Azure", "SQL Server", "Entity Framework Core", "MongoDB", "Node.js", "API Integration"],
-  },
-  {
-    group: "Front-end",
-    items: ["Blazor", "React", "JavaScript", "HTML & CSS"],
-  },
-  {
-    group: "AI & Data",
-    items: [
-      "LLMs",
-      "AI Agents",
-      "LLM Integration",
-      "RAG",
-      "Vector Search & Embeddings",
-      "Azure OpenAI",
-      "Semantic Kernel",
-      "Tool Calling",
-      "Prompt Engineering",
-      "Python",
-      "Data Annotation",
-    ],
-  },
-  {
-    group: "Practices & Tools",
-    items: ["Git & GitHub", "Agile", "CI/CD", "Microsoft Office Suite"],
-  },
-];
-
-const EDUCATION = [
-  { school: "IT-Högskolan", detail: ".NET Cloud Developer, Göteborg", year: "2024–26" },
-  { school: "Harvard University", detail: "CS50: Introduction to Computer Science (edX)", year: "Cert." },
-  { school: "Polhemsgymnasiet", detail: "Upper secondary, Göteborg", year: "" },
-];
-
-const EXTRAS = [
-  { k: "UF (Young Enterprise)", v: "CEO & Head of Sales" },
-  { k: "Languages", v: "Swedish (native) · English (fluent) · Pashto (fluent)" },
-  { k: "Licence", v: "Swedish driving licence (B)" },
-  { k: "Certificates", v: "IT-Högskolan diploma · CS50 certificate" },
-];
-
-const MARQUEE = [".NET", "AZURE", "C#", "BLAZOR", "SQL SERVER", "EF CORE", "MONGODB", "NODE.JS", "LLMS", "AI AGENTS", "RAG", "PYTHON", "CI/CD", "DEVOPS", "REACT"];
 
 /* ------------------------------------------------------------------ */
-/*  PRIMITIVES                                                        */
+/*  Small pieces                                                      */
 /* ------------------------------------------------------------------ */
 
-function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+function Mark({ className = "" }: { className?: string }) {
   return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0, y: 26 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="mark-g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#7DD3FC" />
+          <stop offset="1" stopColor="#A78BFA" />
+        </linearGradient>
+      </defs>
+      <path d="M5 7 12 18 19 6M5 7l14-1" fill="none" stroke="url(#mark-g)" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="5" cy="7" r="2.6" fill="#7DD3FC" />
+      <circle cx="19" cy="6" r="2.6" fill="#A78BFA" />
+      <circle cx="12" cy="18" r="2.6" fill="#C4B5FD" />
+    </svg>
   );
 }
 
-function SectionHead({ index, title, sub }: { index: string; title: string; sub?: string }) {
+function Section({
+  id,
+  title,
+  intro,
+  children,
+}: {
+  id: string;
+  title: string;
+  intro?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex items-end justify-between gap-6 border-b border-ink pb-4 mb-12">
-      <div className="flex items-baseline gap-4 sm:gap-6">
-        <span className="font-mono text-sm text-accent">{index}</span>
-        <h2 className="font-display text-4xl sm:text-6xl leading-none">{title}</h2>
+    <section id={id} className="scroll-mt-20 mx-auto max-w-6xl px-5 sm:px-8 py-16 sm:py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-8 lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] leading-[1.1]">{title}</h2>
+          {intro && <p className="mt-4 text-muted leading-relaxed max-w-md">{intro}</p>}
+        </div>
+        <div className="min-w-0">{children}</div>
       </div>
-      {sub && <span className="kicker text-ink/50 hidden sm:block text-right max-w-[12rem]">{sub}</span>}
-    </div>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  HEADER                                                            */
+/*  Header                                                            */
 /* ------------------------------------------------------------------ */
-
-function Clock() {
-  const [time, setTime] = useState<string>("");
-  useEffect(() => {
-    const fmt = () =>
-      new Intl.DateTimeFormat("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        timeZone: "Europe/Stockholm",
-        hour12: false,
-      }).format(new Date());
-    setTime(fmt());
-    const id = setInterval(() => setTime(fmt()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return <span className="tabular-nums">{time || "--:--:--"}</span>;
-}
 
 function Header() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-paper/85 backdrop-blur-sm border-b border-ink">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 h-14 flex items-center justify-between">
-        <a href="#top" className="font-display font-semibold text-lg tracking-tight">
-          GUSTAV SAFI<span className="text-accent">.</span>
+    <header className="fixed top-0 inset-x-0 z-50 border-b border-line/60 bg-night/70 backdrop-blur-md">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
+        <a href="#top" className="flex items-center gap-2.5 font-semibold tracking-tight">
+          <Mark className="h-6 w-6" />
+          Gustav Safi
         </a>
-        <nav className="hidden md:flex items-center gap-6">
+        <nav aria-label="Sections" className="hidden md:flex items-center gap-7 text-sm text-muted">
           {NAV.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className="kicker text-ink/60 hover:text-ink link-sweep">
+            <a key={n.id} href={`#${n.id}`} className="hover:text-fg transition-colors">
               {n.label}
             </a>
           ))}
         </nav>
-        <div className="font-mono text-[0.68rem] text-ink/55 flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald inline-block" />
-          <span className="hidden xs:inline">GÖTEBORG</span> <Clock />
-        </div>
+        <a
+          href="#contact"
+          className="rounded-full border border-line bg-raised/60 px-4 py-1.5 text-sm font-medium hover:border-cyan/60 hover:text-cyan transition-colors"
+        >
+          Contact
+        </a>
       </div>
-      <motion.div className="h-[2px] bg-accent origin-left" style={{ scaleX }} />
     </header>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  HERO                                                              */
+/*  Hero                                                              */
 /* ------------------------------------------------------------------ */
 
 function Hero() {
-  const words = ["from cloud back-ends", "to the AI logic", "that runs on top."];
   return (
-    <section id="top" className="relative pt-28 sm:pt-36 pb-16">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        {/* meta row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-wrap items-center justify-between gap-2 border-b border-ink pb-3 mb-8 kicker text-ink/60"
-        >
-          <span>Portfolio / 2026</span>
-          <span>.NET Cloud Developer</span>
-          <span className="hidden sm:block">Göteborg, Sweden</span>
-        </motion.div>
-
-        {/* giant name */}
-        <div className="relative">
-          <h1 className="font-display font-semibold leading-[0.82] tracking-tight text-[19vw] sm:text-[15vw] lg:text-[13.5vw]">
-            <motion.span
-              className="block"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            >
-              GUSTAV
-            </motion.span>
-            <motion.span
-              className="block"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              SAFI<span className="text-accent">.</span>
-            </motion.span>
+    <section id="top" className="relative hero-sky overflow-hidden">
+      <HeroNetwork />
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8 pt-32 pb-16 sm:pt-36 lg:pt-40 lg:pb-24 grid grid-cols-1 lg:grid-cols-[1fr_1.02fr] gap-12 lg:gap-6 items-center">
+        <div>
+          <p className="flex items-center gap-2.5 text-muted">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 motion-safe:animate-ping" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            AI and cloud engineer in Göteborg, available for new roles
+          </p>
+          <h1 className="mt-6 text-[2.75rem] xs:text-5xl sm:text-6xl lg:text-[4.25rem] font-semibold tracking-[-0.04em] leading-[1.02] max-w-[13ch]">
+            I build AI agents and the cloud they run on.
           </h1>
-        </div>
-
-        {/* statement + intro */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 mt-10 border-t border-ink pt-8">
-          <div className="font-display text-2xl sm:text-4xl leading-[1.05]">
-            {words.map((w, i) => (
-              <motion.span
-                key={i}
-                className="block"
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.5 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {i === 0 ? "I build stable systems, " : ""}
-                {w}
-              </motion.span>
-            ))}
+          <p className="mt-7 text-lg text-muted leading-relaxed max-w-[34rem]">
+            I take AI features all the way to production: the agent and its prompts, the ASP.NET Core API in front of it,
+            and the Azure infrastructure and pipelines that keep it running.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <a
+              href="#projects"
+              className="signal-bg rounded-full px-6 py-3 font-semibold text-night hover:brightness-110 transition"
+            >
+              See my projects
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="rounded-full border border-line bg-night/40 px-6 py-3 font-medium hover:border-cyan/60 hover:text-cyan transition-colors"
+            >
+              Email me
+            </a>
           </div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col justify-between gap-6"
-          >
-            <p className="font-sans text-ink/70 leading-relaxed max-w-sm">
-              A .NET &amp; cloud developer who ships working software. I work hands-on with C#, databases, APIs and Azure
-              across both front-end and back-end, and build practical AI on top.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <a href="#contact" className="group inline-flex items-center gap-2 bg-ink text-paper px-5 py-2.5 kicker hover:bg-accent transition-colors">
-                Get in touch
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </a>
-              <a href="#triage" className="inline-flex items-center gap-2 border border-ink px-5 py-2.5 kicker hover:bg-ink hover:text-paper transition-colors">
-                See the case study
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  MARQUEE                                                           */
-/* ------------------------------------------------------------------ */
-
-function Marquee() {
-  const row = [...MARQUEE, ...MARQUEE];
-  return (
-    <div className="marquee-wrap border-y border-ink bg-ink text-paper overflow-hidden py-4 select-none">
-      <div className="marquee-track">
-        {row.map((t, i) => (
-          <span key={i} className="font-display text-2xl sm:text-3xl px-6 flex items-center gap-6">
-            {t}
-            <span className="text-accent">/</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  STATS                                                             */
-/* ------------------------------------------------------------------ */
-
-function Stats() {
-  return (
-    <section className="mx-auto max-w-[1400px] px-5 sm:px-8 py-16">
-      <div className="grid grid-cols-2 lg:grid-cols-4 border-l border-t border-ink">
-        {STATS.map((s, i) => (
-          <Reveal key={i} delay={i * 0.08} className="border-r border-b border-ink p-6 sm:p-8">
-            <div className="font-display text-5xl sm:text-6xl text-accent mb-3">{s.n}</div>
-            <p className="font-mono text-xs text-ink/60 uppercase tracking-wider leading-relaxed">{s.label}</p>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  SECTIONS                                                          */
-/* ------------------------------------------------------------------ */
-
-function Profile() {
-  return (
-    <section id="profile" className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20 scroll-mt-16">
-      <SectionHead index="01" title="Profile" sub="Who I am & how I work" />
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr] gap-10 lg:gap-20">
-        <Reveal>
-          <p className="font-display text-2xl sm:text-3xl leading-[1.15] mb-8">
-            I&apos;m a problem-solver first and a developer second. I like taking a vague requirement and turning it into
-            something stable that actually ships.
-          </p>
-          <p className="font-sans text-ink/70 leading-relaxed max-w-xl">
-            My focus is .NET and the cloud, including C#, databases, APIs and Azure. I have real competence on both the
-            front-end and the back-end. I learn fast, take ownership of what I&apos;m given, and I&apos;m just as comfortable building
-            my own projects (including practical AI tools) as I am collaborating in a team or freelancing for clients.
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div className="border-t border-ink">
-            {[
-              ["Based in", "Göteborg, Sweden"],
-              ["Discipline", ".NET Cloud Developer"],
-              ["Working on", "Cloud, back-end & applied AI"],
-              ["Availability", "Open to opportunities"],
-            ].map(([k, v]) => (
-              <div key={k} className="flex justify-between gap-4 py-4 border-b border-ink/15">
-                <span className="kicker text-ink/50">{k}</span>
-                <span className="font-sans text-right text-ink font-medium">{v}</span>
+          <dl className="mt-12 grid grid-cols-1 xs:grid-cols-3 gap-6 border-t border-line/80 pt-6 max-w-[36rem]">
+            {HIGHLIGHTS.map((h) => (
+              <div key={h.value}>
+                <dt className="font-semibold text-fg">{h.value}</dt>
+                <dd className="mt-1 text-sm text-muted leading-snug">{h.label}</dd>
               </div>
             ))}
-          </div>
-        </Reveal>
+          </dl>
+        </div>
+        <SystemGraph className="w-full max-w-[600px] mx-auto lg:ml-auto" />
       </div>
     </section>
   );
 }
 
-function Triage() {
-  return (
-    <section id="triage" className="bg-paper-dim border-y border-ink scroll-mt-16">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20">
-        <SectionHead index="02" title="Case Study" sub="Hospition.IT, 1st place" />
-        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-16 items-start">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 border border-accent text-accent px-3 py-1 kicker mb-6">
-              ★ Hackathon winner
-            </div>
-            <h3 className="font-display text-3xl sm:text-4xl leading-tight mb-6">
-              A triage engine for ophthalmology.
-            </h3>
-            <p className="font-sans text-ink/70 leading-relaxed mb-4">
-              At the Hospition.IT hackathon my team took first place with a digital triage prototype for eye clinics. I
-              designed a decision engine that scores <strong className="font-medium text-ink">weighted symptom
-              parameters</strong> to automatically categorise patient cases by clinical priority.
-            </p>
-            <p className="font-sans text-ink/70 leading-relaxed mb-8">
-              It combined requirements analysis, logic modelling and a usable prototype for clinical decision support.
-              The interactive panel is that same model, rebuilt so you can try it. Toggle findings and watch the
-              priority recompute in real time.
-            </p>
-            <ul className="space-y-2 font-mono text-sm text-ink/70">
-              <li className="flex gap-3"><span className="text-accent">→</span> Additive weighted scoring</li>
-              <li className="flex gap-3"><span className="text-accent">→</span> Red-flag overrides for critical findings</li>
-              <li className="flex gap-3"><span className="text-accent">→</span> Four-tier priority classification</li>
-            </ul>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <TriageEngine />
-            <p className="mt-4 font-mono text-[0.68rem] text-ink/40 leading-relaxed">
-              * Illustrative model for portfolio purposes. Not for real clinical use.
-            </p>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
+/* ------------------------------------------------------------------ */
+/*  Sections                                                          */
+/* ------------------------------------------------------------------ */
 
 function Work() {
   return (
-    <section id="work" className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20 scroll-mt-16">
-      <SectionHead index="03" title="Work" sub="Software, teams & the factory floor" />
-      <div className="border-t border-ink">
-        {WORK.map((w, i) => (
-          <Reveal key={i}>
-            <div className="group grid grid-cols-1 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)_9rem] gap-2 md:gap-8 items-baseline py-7 border-b border-ink/20 hover:border-ink transition-colors relative">
-              <div className="absolute left-0 top-0 h-full w-[3px] bg-accent scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-300 -translate-x-5 hidden md:block" />
-              <div>
-                <span className="font-mono text-xs text-ink/50">{w.period}</span>
-                <div className="kicker text-accent mt-1">{w.type}</div>
-              </div>
-              <div>
-                <h3 className="font-display text-2xl sm:text-3xl leading-tight group-hover:translate-x-1 transition-transform">
-                  {w.role}
-                  <span className="text-ink/40"> / {w.org}</span>
-                </h3>
-                <p className="font-sans text-ink/65 leading-relaxed mt-2 max-w-2xl">{w.desc}</p>
-              </div>
-              <div className="flex md:flex-col flex-wrap gap-1.5 md:items-end">
-                {w.tags.map((t) => (
-                  <span key={t} className="font-mono text-[0.6rem] uppercase tracking-wider border border-ink/25 px-2 py-0.5 text-ink/60">
-                    {t}
-                  </span>
-                ))}
-              </div>
+    <Section
+      id="work"
+      title="What I do"
+      intro="Three areas that usually live with different people. I work across all of them, which is what makes integrations work."
+    >
+      <div className="divide-y divide-line border-y border-line">
+        {CAPABILITIES.map((c) => (
+          <div key={c.title} className="grid grid-cols-1 md:grid-cols-[1fr_14rem] gap-4 md:gap-10 py-8">
+            <div>
+              <h3 className="text-xl font-semibold tracking-tight">{c.title}</h3>
+              <p className="mt-3 text-muted leading-relaxed max-w-[38rem]">{c.text}</p>
             </div>
-          </Reveal>
+            <ul className="flex flex-wrap md:flex-col gap-x-4 gap-y-1.5 text-sm text-faint md:pt-1">
+              {c.tools.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
+    </Section>
+  );
+}
+
+function CaseStudy() {
+  return (
+    <section id="case-study" className="scroll-mt-20 border-y border-line bg-deep/70">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16 sm:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 mb-10 lg:mb-12">
+          <div>
+            <span className="inline-flex rounded-full border border-cyan/40 bg-cyan/10 px-3 py-1 text-sm text-cyan">
+              1st place, Hospition.IT hackathon, Dec 2025
+            </span>
+            <h2 className="mt-6 text-3xl sm:text-4xl font-semibold tracking-[-0.03em] leading-[1.1]">
+              A triage engine for eye clinics
+            </h2>
+          </div>
+          <div className="lg:pt-12">
+            <p className="text-muted leading-relaxed">
+              My team won with a digital triage prototype for ophthalmology. I designed the decision engine: weighted
+              symptom scores that sort patient cases by clinical priority, with red-flag findings that override the score.
+            </p>
+            <p className="mt-4 text-muted leading-relaxed">
+              The panel below is the same model rebuilt for this page. Select findings and the priority updates as you go.
+            </p>
+          </div>
+        </div>
+        <TriageEngine />
+        <p className="mt-4 text-sm text-faint">An illustrative model for this portfolio, not for clinical use.</p>
+      </div>
     </section>
+  );
+}
+
+function Projects() {
+  return (
+    <Section
+      id="projects"
+      title="Projects"
+      intro="A selection of what I have built in school, for clients and on my own. More is on GitHub."
+    >
+      <div className="border-b border-line">
+        {PROJECTS.map((p) => (
+          <article key={p.title} className="grid grid-cols-1 sm:grid-cols-[6.5rem_1fr] gap-x-8 gap-y-2 py-8 border-t border-line">
+            <div className="text-sm text-faint sm:pt-1">
+              <span className="text-muted">{p.year}</span>
+              <span className="sm:block sm:mt-0.5"><span className="sm:hidden">, </span>{p.kind}</span>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold tracking-tight leading-snug">{p.title}</h3>
+              <p className="mt-3 text-muted leading-relaxed max-w-[40rem]">{p.text}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+                <ul className="flex flex-wrap gap-2" aria-label="Technologies">
+                  {p.tech.map((t) => (
+                    <li key={t} className="rounded-md bg-raised px-2 py-0.5 text-[0.8rem] text-muted">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+                {p.href && (
+                  <a
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-cyan hover:underline underline-offset-4"
+                  >
+                    Code on GitHub
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <a
+        href={CONTACT.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-8 inline-flex items-center gap-1 font-medium text-cyan hover:underline underline-offset-4"
+      >
+        All repositories on GitHub
+        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+      </a>
+    </Section>
+  );
+}
+
+function Experience() {
+  return (
+    <Section
+      id="experience"
+      title="Experience"
+      intro="Two internships, ongoing AI and freelance work, and years on the production floor before that."
+    >
+      <ol className="relative pl-9">
+        <span className="rail absolute left-[5px] top-2 bottom-0 w-px" aria-hidden="true" />
+        {EXPERIENCE.map((e, i) => (
+          <li key={e.org + e.role} className="relative pb-12 last:pb-0">
+            <span
+              className={`absolute -left-9 top-1.5 h-[11px] w-[11px] rounded-full border-2 bg-night ${
+                i < 4 ? "border-cyan" : "border-faint"
+              }`}
+              aria-hidden="true"
+            />
+            <p className="text-sm text-faint">{e.period}</p>
+            <h3 className="mt-1 text-xl font-semibold tracking-tight">
+              {e.role}
+              <span className="font-normal text-muted">, {e.org}</span>
+            </h3>
+            <p className="mt-2.5 text-muted leading-relaxed max-w-[40rem]">{e.text}</p>
+          </li>
+        ))}
+      </ol>
+    </Section>
   );
 }
 
 function Stack() {
   return (
-    <section id="stack" className="bg-ink text-paper border-y border-ink scroll-mt-16">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20">
-        <div className="flex items-end justify-between gap-6 border-b border-paper/30 pb-4 mb-12">
-          <div className="flex items-baseline gap-4 sm:gap-6">
-            <span className="font-mono text-sm text-accent">04</span>
-            <h2 className="font-display text-4xl sm:text-6xl leading-none">Stack</h2>
+    <Section id="stack" title="Stack" intro="The tools I reach for, grouped by what they are for.">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10">
+        {STACK.map((g) => (
+          <div key={g.group}>
+            <h3 className="font-semibold pb-3 border-b border-line">{g.group}</h3>
+            <ul className="mt-3 space-y-2 text-muted">
+              {g.items.map((it) => (
+                <li key={it}>{it}</li>
+              ))}
+            </ul>
           </div>
-          <span className="kicker text-paper/50 hidden sm:block">The tools, grouped by use</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
-          {STACK.map((g, i) => (
-            <Reveal key={g.group} delay={(i % 2) * 0.08}>
-              <div className="flex items-baseline gap-3 mb-5">
-                <span className="font-mono text-xs text-accent">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="kicker text-paper/70">{g.group}</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {g.items.map((it) => (
-                  <span
-                    key={it}
-                    className="font-display text-lg sm:text-xl border border-paper/25 px-3 py-1.5 hover:bg-accent hover:border-accent hover:text-paper transition-colors cursor-default"
-                  >
-                    {it}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function Education() {
+  return (
+    <Section id="education" title="Education">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+        <div className="space-y-6">
+          {EDUCATION.map((e) => (
+            <div key={e.school}>
+              <p className="text-sm text-faint">{e.year}</p>
+              <h3 className="mt-1 text-lg font-semibold tracking-tight">{e.school}</h3>
+              <p className="mt-1 text-muted">{e.detail}</p>
+            </div>
           ))}
         </div>
+        <dl className="space-y-5">
+          {EXTRAS.map((x) => (
+            <div key={x.k}>
+              <dt className="text-sm text-faint">{x.k}</dt>
+              <dd className="mt-1 text-muted">{x.v}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-    </section>
+    </Section>
   );
 }
-
-function Credentials() {
-  return (
-    <section id="credentials" className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20 scroll-mt-16">
-      <SectionHead index="05" title="Credentials" sub="Education & the rest" />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
-        <Reveal>
-          <span className="kicker text-ink/50 block mb-6">Education</span>
-          <div className="border-t border-ink">
-            {EDUCATION.map((e) => (
-              <div key={e.school} className="flex justify-between gap-4 py-5 border-b border-ink/15 group">
-                <div>
-                  <h3 className="font-display text-2xl leading-tight group-hover:text-accent transition-colors">{e.school}</h3>
-                  <p className="font-sans text-ink/60 text-sm mt-1">{e.detail}</p>
-                </div>
-                {e.year && <span className="font-mono text-xs text-ink/50 shrink-0">{e.year}</span>}
-              </div>
-            ))}
-          </div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <span className="kicker text-ink/50 block mb-6">Also worth knowing</span>
-          <div className="border-t border-ink">
-            {EXTRAS.map((x) => (
-              <div key={x.k} className="py-5 border-b border-ink/15">
-                <div className="kicker text-accent mb-1">{x.k}</div>
-                <p className="font-sans text-ink/80">{x.v}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  CONTACT / FOOTER                                                 */
-/* ------------------------------------------------------------------ */
 
 function Contact() {
-  const links = [
-    {
-      label: "Email",
-      value: <>GustavSafi<wbr />@hotmail.com</>,
-      href: "mailto:GustavSafi@hotmail.com",
-    },
-    {
-      label: "GitHub",
-      value: <>github.com/<wbr />GustavSafi</>,
-      href: "https://github.com/GustavSafi",
-      ext: true,
-    },
-    {
-      label: "LinkedIn",
-      value: <>in/<wbr />gustav-safi</>,
-      href: "https://www.linkedin.com/in/gustav-safi-6b6257248/",
-      ext: true,
-    },
-  ];
   return (
-    <footer id="contact" className="bg-ink text-paper scroll-mt-16">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-20">
-        <div className="flex items-baseline gap-4 sm:gap-6 mb-10">
-          <span className="font-mono text-sm text-accent">06</span>
-          <span className="kicker text-paper/50">Contact</span>
-        </div>
-
-        <h2 className="font-display font-semibold leading-[0.85] tracking-tight text-[15vw] lg:text-[11vw] mb-12">
-          LET&apos;S<br />
-          <span className="text-outline" style={{ WebkitTextStrokeColor: "var(--color-paper)" }}>
-            BUILD
-          </span>{" "}
-          <span className="text-accent">→</span>
+    <footer id="contact" className="scroll-mt-20 relative overflow-hidden border-t border-line hero-sky">
+      <HeroNetwork />
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8 pt-24 pb-10 sm:pt-32">
+        <h2 className="text-4xl sm:text-6xl font-semibold tracking-[-0.04em] leading-[1.05] max-w-[16ch]">
+          Have an AI feature that needs to reach production?
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-paper/25">
-          {links.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              target={l.ext ? "_blank" : undefined}
-              rel={l.ext ? "noopener noreferrer" : undefined}
-              className="group border-b md:border-b-0 md:border-r border-paper/25 last:border-r-0 p-6 sm:p-8 hover:bg-accent transition-colors"
-            >
-              <span className="kicker text-paper/50 group-hover:text-paper/80 block mb-3">{l.label}</span>
-              <span className="font-display text-xl sm:text-2xl break-words flex items-center gap-2">
-                <span className="min-w-0">{l.value}</span>
-                <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">↗</span>
-              </span>
-            </a>
-          ))}
+        <p className="mt-6 text-lg text-muted max-w-[34rem] leading-relaxed">
+          I&apos;m open to roles in Göteborg and remote. Email is the fastest way to reach me.
+        </p>
+        <a
+          href={`mailto:${CONTACT.email}`}
+          className="mt-10 inline-block break-all text-2xl xs:text-3xl sm:text-5xl font-semibold tracking-tight bg-gradient-to-r from-cyan to-violet bg-clip-text text-transparent hover:opacity-90"
+        >
+          {CONTACT.email}
+        </a>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <a
+            href={CONTACT.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-night/40 px-5 py-2.5 font-medium hover:border-cyan/60 hover:text-cyan transition-colors"
+          >
+            LinkedIn
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <a
+            href={CONTACT.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-night/40 px-5 py-2.5 font-medium hover:border-cyan/60 hover:text-cyan transition-colors"
+          >
+            GitHub
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
-
-        <div className="flex flex-col sm:flex-row justify-between gap-3 mt-12 pt-6 border-t border-paper/25 font-mono text-[0.68rem] text-paper/45">
-          <span>© 2026 Gustav Safi · Göteborg, Sweden</span>
-          <span>Designed &amp; built from scratch · No templates</span>
+        <div className="mt-24 flex flex-col sm:flex-row justify-between gap-2 border-t border-line/80 pt-6 text-sm text-faint">
+          <span className="flex items-center gap-2">
+            <Mark className="h-4 w-4" />© 2026 Gustav Safi, Göteborg
+          </span>
+          <span>Designed and built by me with Next.js</span>
         </div>
       </div>
     </footer>
@@ -572,22 +386,29 @@ function Contact() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  PAGE                                                              */
+/*  Page                                                              */
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
   return (
-    <main className="relative">
+    <>
+      <a
+        href="#work"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-raised focus:px-4 focus:py-2"
+      >
+        Skip to content
+      </a>
       <Header />
-      <Hero />
-      <Marquee />
-      <Stats />
-      <Profile />
-      <Triage />
-      <Work />
-      <Stack />
-      <Credentials />
+      <main>
+        <Hero />
+        <Work />
+        <Projects />
+        <CaseStudy />
+        <Experience />
+        <Stack />
+        <Education />
+      </main>
       <Contact />
-    </main>
+    </>
   );
 }
