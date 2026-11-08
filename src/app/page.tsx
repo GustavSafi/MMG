@@ -105,13 +105,7 @@ function Hero() {
       <HeroNetwork />
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8 pt-32 pb-16 sm:pt-36 lg:pt-40 lg:pb-24 grid grid-cols-1 lg:grid-cols-[1fr_1.02fr] gap-12 lg:gap-6 items-center">
         <div>
-          <p className="flex items-center gap-2.5 text-muted">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 motion-safe:animate-ping" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            AI and cloud engineer in Göteborg, available for new roles
-          </p>
+          <p className="text-muted">AI &amp; Cloud Engineer and Integration Specialist</p>
           <h1 className="mt-6 text-[2.75rem] xs:text-5xl sm:text-6xl lg:text-[4.25rem] font-semibold tracking-[-0.04em] leading-[1.02] max-w-[13ch]">
             I build AI agents and the cloud they run on.
           </h1>
@@ -346,7 +340,7 @@ function Contact() {
           Have an AI feature that needs to reach production?
         </h2>
         <p className="mt-6 text-lg text-muted max-w-[34rem] leading-relaxed">
-          I&apos;m open to roles in Göteborg and remote. Email is the fastest way to reach me.
+          Email is the fastest way to reach me.
         </p>
         <a
           href={`mailto:${CONTACT.email}`}
@@ -376,7 +370,7 @@ function Contact() {
         </div>
         <div className="mt-24 flex flex-col sm:flex-row justify-between gap-2 border-t border-line/80 pt-6 text-sm text-faint">
           <span className="flex items-center gap-2">
-            <Mark className="h-4 w-4" />© 2026 Gustav Safi, Göteborg
+            <Mark className="h-4 w-4" />© 2026 Gustav Safi
           </span>
           <span>Designed and built by me with Next.js</span>
         </div>

@@ -4,7 +4,7 @@ import "./globals.css";
 
 const title = "Gustav Safi | AI & Cloud Engineer";
 const description =
-  "Gustav Safi is an AI and cloud engineer in Göteborg. He builds AI agents and LLM features, the ASP.NET Core APIs around them and the Azure infrastructure they run on.";
+  "Gustav Safi is an AI and cloud engineer. He builds AI agents and LLM features, the ASP.NET Core APIs around them and the Azure infrastructure they run on.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gustavsafi.se"),
@@ -22,7 +22,6 @@ export const metadata: Metadata = {
     ".NET",
     "C#",
     "DevOps",
-    "Göteborg",
   ],
   authors: [{ name: "Gustav Safi", url: "https://gustavsafi.se" }],
   alternates: { canonical: "/" },
@@ -53,7 +52,6 @@ const personJsonLd = {
   jobTitle: "AI & Cloud Engineer",
   url: "https://gustavsafi.se",
   email: "mailto:GustavSafi@hotmail.com",
-  address: { "@type": "PostalAddress", addressLocality: "Göteborg", addressCountry: "SE" },
   alumniOf: { "@type": "EducationalOrganization", name: "IT-Högskolan" },
   sameAs: ["https://github.com/GustavSafi", "https://www.linkedin.com/in/gustav-safi-6b6257248/"],
 };

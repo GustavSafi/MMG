@@ -142,7 +142,7 @@ export const STACK = [
 ];
 
 export const EDUCATION = [
-  { school: "IT-Högskolan, Göteborg", detail: ".NET Cloud Developer, Higher Vocational Education Diploma", year: "2024–2026" },
+  { school: "IT-Högskolan", detail: ".NET Cloud Developer, Higher Vocational Education Diploma", year: "2024–2026" },
   { school: "Harvard University via edX", detail: "CS50: Introduction to Computer Science, certificate", year: "2023" },
 ];
 
