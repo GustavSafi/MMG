@@ -25,7 +25,7 @@ const BUILD = [
   },
   {
     title: "Make it usable",
-    text: "The result had to be clear at a glance: one priority, what to do next, and the reasoning behind it. That reasoning is what the trace on this page shows.",
+    text: "The result had to be clear at a glance: one priority, what to do next, and the reasoning behind it. That reasoning is what the graph on this page shows.",
   },
 ];
 

@@ -107,6 +107,8 @@ body {
 @media (max-width: 639px) {
   .sg-name { font-size: 23px; }
   .sg-sub { display: none; }
+  .ab-name { font-size: 24px; }
+  .ab-sub { display: none; }
 }
 
 /* Experience timeline rail */

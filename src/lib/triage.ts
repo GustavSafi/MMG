@@ -23,14 +23,16 @@ export type TierKey = "idle" | "routine" | "semi" | "urgent" | "emergent";
 export type Tier = { key: TierKey; label: string; action: string; color: string; min: number };
 
 export const TIERS: Record<TierKey, Tier> = {
-  emergent: { key: "emergent", label: "Emergent", action: "See immediately and refer to emergency care", color: "#F87171", min: 50 },
-  urgent: { key: "urgent", label: "Urgent", action: "Assess within 24 hours", color: "#FBBF24", min: 30 },
-  semi: { key: "semi", label: "Semi-urgent", action: "Book within one week", color: "#34D399", min: 14 },
-  routine: { key: "routine", label: "Routine", action: "Schedule a standard appointment", color: "#9AA6C4", min: 1 },
+  emergent: { key: "emergent", label: "Emergent", action: "See immediately and refer to emergency care", color: "#FB7185", min: 50 },
+  urgent: { key: "urgent", label: "Urgent", action: "Assess within 24 hours", color: "#A78BFA", min: 30 },
+  semi: { key: "semi", label: "Semi-urgent", action: "Book within one week", color: "#7DD3FC", min: 14 },
+  routine: { key: "routine", label: "Routine", action: "Schedule a standard appointment", color: "#94A3B8", min: 1 },
   idle: { key: "idle", label: "No findings yet", action: "Select the findings present to compute a priority", color: "#66769A", min: 0 },
 };
 
 export const TIER_ORDER: TierKey[] = ["routine", "semi", "urgent", "emergent"];
+export const TIER_RANK: Record<TierKey, number> = { idle: 0, routine: 1, semi: 2, urgent: 3, emergent: 4 };
+export const TIER_RANGE: Record<Exclude<TierKey, "idle">, string> = { routine: "1–13", semi: "14–29", urgent: "30–49", emergent: "50+" };
 export const SCALE_MAX = 90;
 
 export function evaluate(selected: Set<string>) {

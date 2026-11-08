@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import HeroNetwork from "@/components/HeroNetwork";
 import SystemGraph from "@/components/SystemGraph";
+import AgentBuilder from "@/components/AgentBuilder";
+import Pipeline from "@/components/Pipeline";
 import Section from "@/components/Section";
 import { CAPABILITIES, HIGHLIGHTS } from "@/content";
 import { TIERS, TIER_ORDER } from "@/lib/triage";
@@ -69,6 +71,20 @@ function Work() {
         ))}
       </div>
     </Section>
+  );
+}
+
+function Demo({ id, title, intro, children }: { id: string; title: string; intro: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="scroll-mt-20 border-t border-line">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16 sm:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-6 lg:gap-16 mb-10">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] leading-[1.1]">{title}</h2>
+          <p className="text-muted leading-relaxed max-w-[40rem] lg:pt-1.5">{intro}</p>
+        </div>
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -140,6 +156,20 @@ export default function Home() {
     <>
       <Hero />
       <Work />
+      <Demo
+        id="agent"
+        title="Build an agent"
+        intro="An agent is only as useful as the tools it can reach. Connect some tools, give it a task and watch it plan and call them. This one is scripted, but it follows the same pattern I use with real models."
+      >
+        <AgentBuilder />
+      </Demo>
+      <Demo
+        id="pipeline"
+        title="Ship a release"
+        intro="This is the kind of pipeline I set up in Azure DevOps and GitHub Actions. Push a commit and watch it build, test and deploy. If the new version fails its health check, production rolls back on its own."
+      >
+        <Pipeline />
+      </Demo>
       <TriageTeaser />
     </>
   );
